@@ -1,27 +1,43 @@
-import Input from "@/components/Input";
-import axios from "axios";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-
+import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import Input from "@/components/Input";
+import { toast } from "react-toastify";
 
 const Auth = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
   const [variant, setVariant] = useState("login");
 
-  const toogleVariant = useCallback(() => {
+  // Toggle between login and register forms
+  const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
 
+  // Validate inputs and login user
   const login = useCallback(async () => {
+    if (!email || !password) {
+      toast.error("Email and password are required", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      //console.log("Email and password are required");
+      return;
+    }
+
     try {
       await signIn("credentials", {
         email,
@@ -30,12 +46,18 @@ const Auth = () => {
         callbackUrl: "/",
       });
       router.push("/");
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
     }
   }, [email, password, router]);
 
+  // Validate inputs, register user, and then login
   const register = useCallback(async () => {
+    if (!email || !password || !name) {
+      console.log("Name, email, and password are required");
+      return;
+    }
+
     try {
       await axios.post("/api/register", {
         email,
@@ -60,12 +82,11 @@ const Auth = () => {
             <h2 className="text-white text-4xl mb-8 font-semibold">
               {variant === "login" ? " Sign in" : "Register"}
             </h2>
-
             <div className="flex flex-col gap-4">
               {variant === "register" && (
                 <Input
                   id="username"
-                  onChange={(event: any) => {
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setName(event.target.value);
                   }}
                   value={name}
@@ -75,7 +96,7 @@ const Auth = () => {
               )}
               <Input
                 id="email"
-                onChange={(e: any) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setEmail(e.target.value);
                 }}
                 value={email}
@@ -84,7 +105,7 @@ const Auth = () => {
               />
               <Input
                 id="password"
-                onChange={(e: any) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setPassword(e.target.value);
                 }}
                 value={password}
@@ -96,7 +117,7 @@ const Auth = () => {
               onClick={variant === "login" ? login : register}
               className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
             >
-              {variant === "login" ? "Login" : "Sing up"}
+              {variant === "login" ? "Login" : "Sign up"}
             </button>
             <div className="flex flex-row items-center gap-4 mt-8 justify-center">
               <div
@@ -119,7 +140,7 @@ const Auth = () => {
                 ? "First time using Pitflix?"
                 : "Already have an account?"}
               <span
-                onClick={toogleVariant}
+                onClick={toggleVariant}
                 className="text-white ml-1 hover:underline cursor-pointer"
               >
                 {variant === "login" ? "Create an account" : "Login"}

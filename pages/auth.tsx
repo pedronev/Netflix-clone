@@ -13,7 +13,13 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
+  const [date, setDate] = useState("");
+
+  const [contador, setContador] = useState(10);
+
   const [variant, setVariant] = useState("login");
+
+  const [chiste, setChiste] = useState("Aqui va a ir un chiste");
 
   const toogleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -34,6 +40,23 @@ const Auth = () => {
       console.log(error);
     }
   }, [email, password, router]);
+
+  function mostrarFecha() {
+    alert("La fecha seleccionada es: " + date);
+  }
+
+  async function traerChiste() {
+    try {
+      await axios
+        .get("https://api.chucknorris.io/jokes/random")
+        .then((response) => {
+          setChiste(response.data.value);
+          console.log(response);
+        });
+    } catch (error) {
+      alert(error);
+    }
+  }
 
   const register = useCallback(async () => {
     try {
@@ -56,11 +79,7 @@ const Auth = () => {
           <img src="/images/logo.png" alt="logo" className="h-12" />
         </nav>
         <div className="flex justify-center">
-          <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:max-w-md rounded-md w-full">
-            <h2 className="text-white text-4xl mb-8 font-semibold">
-              {variant === "login" ? "Iniciar Sesion" : "Registrarse"}
-            </h2>
-
+          <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:max-w-xl rounded-md w-full">
             <div className="flex flex-col gap-4">
               {variant === "register" && (
                 <Input
@@ -73,24 +92,58 @@ const Auth = () => {
                   type="username"
                 />
               )}
-              <Input
-                id="email"
-                onChange={(e: any) => {
-                  setEmail(e.target.value);
-                }}
-                value={email}
-                label="Correo Electronico"
-                type="email"
-              />
-              <Input
-                id="password"
-                onChange={(e: any) => {
-                  setPassword(e.target.value);
-                }}
-                value={password}
-                label="Contraseña"
-                type="password"
-              />
+
+              <div style={{ display: "flex", justifyItems: "space-between" }}>
+                <Input
+                  id="email"
+                  onChange={(e: any) => {
+                    setEmail(e.target.value);
+                  }}
+                  value={email}
+                  label="Correo"
+                  type="email"
+                />
+                <Input
+                  id="password"
+                  onChange={(e: any) => {
+                    setPassword(e.target.value);
+                  }}
+                  value={password}
+                  label="Contraseña"
+                  type="password"
+                />
+              </div>
+
+              <div style={{ display: "flex" }}>
+                <Input
+                  id="email"
+                  onChange={(e: any) => {
+                    setEmail(e.target.value);
+                  }}
+                  value={email}
+                  label="Correo"
+                  type="email"
+                />
+                <Input
+                  id="password"
+                  onChange={(e: any) => {
+                    setPassword(e.target.value);
+                  }}
+                  value={password}
+                  label="Contraseña"
+                  type="password"
+                />
+                <Input
+                  id="date"
+                  onChange={(event: any) => {
+                    console.log(event);
+                    setDate(event.target.value);
+                  }}
+                  value={date}
+                  label="Fecha"
+                  type="date"
+                />
+              </div>
             </div>
             <button
               onClick={variant === "login" ? login : register}
@@ -98,6 +151,22 @@ const Auth = () => {
             >
               {variant === "login" ? "Acceder" : "Registrarse"}
             </button>
+
+            <button
+              onClick={mostrarFecha}
+              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+            >
+              Mostrar Fecha
+            </button>
+
+            <button
+              onClick={() => setContador(contador + 1)}
+              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+            >
+              Sumar la cuenta: {contador}
+            </button>
+
+            <p className="text-white">la cuenta es: {contador}</p>
             <div className="flex flex-row items-center gap-4 mt-8 justify-center">
               <div
                 onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -125,6 +194,21 @@ const Auth = () => {
                 {variant === "login" ? "Crear una cuenta" : "Acceder"}
               </span>
             </p>
+            <h2
+              style={{ textAlign: "end" }}
+              className="text-white text-4xl mb-8 font-semibold"
+            >
+              {variant === "login" ? "Iniciar Sesion" : "Registrarse"}
+            </h2>
+
+            <h2 className="text-white text-4xl mb-8 font-semibold">{chiste}</h2>
+
+            <button
+              onClick={traerChiste}
+              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+            >
+              Traeme un chiste de chuck norris
+            </button>
           </div>
         </div>
       </div>

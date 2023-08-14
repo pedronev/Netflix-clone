@@ -58,7 +58,7 @@ const Auth = () => {
         <div className="flex justify-center">
           <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:max-w-md rounded-md w-full">
             <h2 className="text-white text-4xl mb-8 font-semibold">
-              {variant === "login" ? " Sign in" : "Register"}
+              {variant === "login" ? "Iniciar Sesion" : "Registrarse"}
             </h2>
 
             <div className="flex flex-col gap-4">
@@ -69,7 +69,7 @@ const Auth = () => {
                     setName(event.target.value);
                   }}
                   value={name}
-                  label="Username"
+                  label="Nombre de Usuario"
                   type="username"
                 />
               )}
@@ -79,7 +79,7 @@ const Auth = () => {
                   setEmail(e.target.value);
                 }}
                 value={email}
-                label="Email"
+                label="Correo Electronico"
                 type="email"
               />
               <Input
@@ -88,7 +88,7 @@ const Auth = () => {
                   setPassword(e.target.value);
                 }}
                 value={password}
-                label="Password"
+                label="Contraseña"
                 type="password"
               />
             </div>
@@ -96,7 +96,7 @@ const Auth = () => {
               onClick={variant === "login" ? login : register}
               className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
             >
-              {variant === "login" ? "Login" : "Sing up"}
+              {variant === "login" ? "Acceder" : "Registrarse"}
             </button>
             <div className="flex flex-row items-center gap-4 mt-8 justify-center">
               <div
@@ -116,13 +116,13 @@ const Auth = () => {
             </div>
             <p className="text-neutral-500 mt-12">
               {variant === "login"
-                ? "First time using Pitflix?"
-                : "Already have an account?"}
+                ? "Primera vez usando Pitflix?"
+                : "Ya tienes una cuenta?"}
               <span
                 onClick={toogleVariant}
                 className="text-white ml-1 hover:underline cursor-pointer"
               >
-                {variant === "login" ? "Create an account" : "Login"}
+                {variant === "login" ? "Crear una cuenta" : "Acceder"}
               </span>
             </p>
           </div>

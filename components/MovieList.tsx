@@ -14,7 +14,7 @@ const MovieList = ({ data, title }: { data: any; title: string }) => {
           {title}
         </p>
         <div className="grid grid-cols-4 gap-2">
-          {data.map((movie) => (
+          {data.map((movie: any) => (
             <MovieCard key={movie.id} data={movie} />
           ))}
         </div>
